@@ -18,7 +18,7 @@ CHUNK_OVERLAP = 150
 
 # Retrieval
 TOP_K = 5
-MIN_SIMILARITY = 0.35
+MIN_SIMILARITY = 0.25
 
 # Files
 SUPPORTED_EXTENSIONS = (".pdf", ".txt", ".md")
