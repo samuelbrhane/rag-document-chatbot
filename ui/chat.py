@@ -1,6 +1,15 @@
 import streamlit as st
 
-from rag import answer_question, list_documents
+from rag import (
+    Message,
+    add_message,
+    answer_question,
+    create_chat,
+    get_messages,
+    list_documents,
+    make_title,
+)
+from ui.components import render_chat_sidebar
 
 REFUSAL_REASONS = {
     "low_similarity": "no document was close enough to the question",
@@ -8,15 +17,10 @@ REFUSAL_REASONS = {
     "no_citation": "the answer could not be linked to a source",
 }
 
+visitor_id = st.session_state.visitor_id
+render_chat_sidebar(visitor_id)
+
 st.title("Ask your documents")
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-with st.sidebar:
-    if st.button("Clear chat"):
-        st.session_state.messages = []
-        st.rerun()
 
 # Nothing to search yet
 if not list_documents():
@@ -25,41 +29,62 @@ if not list_documents():
     st.stop()
 
 
-def show_message(message: dict) -> None:
-    with st.chat_message(message["role"]):
-        st.markdown(message["text"])
+def show_message(message: Message, asked: str | None = None) -> None:
+    with st.chat_message(message.role):
+        st.markdown(message.content)
 
-        if message.get("refused"):
-            st.caption(f"Refused because {REFUSAL_REASONS[message['reason']]}.")
+        if message.rewritten_question and message.rewritten_question != asked:
+            st.caption(f"Searched for: {message.rewritten_question}")
 
-        for source in message.get("sources", []):
+        if message.refused and message.refusal_reason:
+            st.caption(f"Refused because {REFUSAL_REASONS[message.refusal_reason]}.")
+
+        for source in message.sources:
             location = source.filename if source.page is None else f"{source.filename}, page {source.page}"
             with st.expander(f"[{source.number}] {location} · score {source.similarity:.2f}"):
                 st.write(source.content)
 
 
-# Show earlier messages
-for message in st.session_state.messages:
-    show_message(message)
+# Load the open chat
+chat_id = st.session_state.get("chat_id")
+messages = get_messages(chat_id, visitor_id) if chat_id else []
+if chat_id and not messages:
+    st.session_state.chat_id = chat_id = None  # deleted or not this visitor's chat
+
+last_question = None
+for message in messages:
+    show_message(message, asked=last_question)
+    if message.role == "user":
+        last_question = message.content
 
 # New question
 if question := st.chat_input("Ask a question about your documents"):
-    user_message = {"role": "user", "text": question}
-    st.session_state.messages.append(user_message)
-    show_message(user_message)
+    show_message(Message(role="user", content=question))
+
+    is_new_chat = chat_id is None
+    if is_new_chat:
+        chat_id = create_chat(visitor_id, make_title(question))
+        st.session_state.chat_id = chat_id
+
+    history = [(m.role, m.content) for m in messages]
+    add_message(chat_id, Message(role="user", content=question))
 
     try:
         with st.spinner("Searching documents..."):
-            answer = answer_question(question)
-        assistant_message = {
-            "role": "assistant",
-            "text": answer.text,
-            "sources": answer.sources,
-            "refused": answer.refused,
-            "reason": answer.reason,
-        }
+            answer = answer_question(question, history)
+        reply = Message(
+            role="assistant",
+            content=answer.text,
+            rewritten_question=answer.searched_for,
+            sources=answer.sources,
+            refused=answer.refused,
+            refusal_reason=answer.reason,
+        )
     except Exception as error:
-        assistant_message = {"role": "assistant", "text": f"Something went wrong: {error}"}
+        reply = Message(role="assistant", content=f"Something went wrong: {error}")
 
-    st.session_state.messages.append(assistant_message)
-    show_message(assistant_message)
+    add_message(chat_id, reply)
+    show_message(reply, asked=question)
+
+    if is_new_chat:
+        st.rerun()  # refresh the sidebar so the new chat appears in the list
