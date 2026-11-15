@@ -9,7 +9,13 @@ from rag import (
     list_documents,
     make_title,
 )
-from ui.components import apply_chat_styles, render_chat_sidebar, render_header, smooth_stream
+from ui.components import (
+    apply_chat_styles,
+    render_chat_sidebar,
+    render_header,
+    render_welcome,
+    smooth_stream,
+)
 
 REFUSAL_REASONS = {
     "low_similarity": "no document was close enough to the question",
@@ -63,8 +69,14 @@ for message in messages:
     if message.role == "user":
         last_question = message.content
 
+if not messages:
+    render_welcome()
+
 # New question
-if question := st.chat_input("Ask a question about your documents"):
+typed = st.chat_input("Ask a question about your documents")
+question = typed or st.session_state.pop("pending_question", None)
+
+if question:
     show_message(Message(role="user", content=question))
 
     if chat_id is None:
