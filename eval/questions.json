@@ -1,0 +1,29 @@
+[
+  {"id": "refund_window", "question": "How long do I have to return an item?", "expect": "answer", "must_contain": ["30"], "sources": ["refund_policy.md"]},
+  {"id": "return_fee", "question": "How much is the return shipping fee?", "expect": "answer", "must_contain": ["6.95"], "sources": ["refund_policy.md"]},
+  {"id": "free_return_label", "question": "Is return shipping free for large orders?", "expect": "answer", "must_contain": ["100"], "sources": ["refund_policy.md"]},
+  {"id": "pillow_return", "question": "Can I return a pillow after opening it?", "expect": "answer", "must_contain": ["open"], "sources": ["refund_policy.md"]},
+  {"id": "express_cost", "question": "How much does express shipping cost?", "expect": "answer", "must_contain": ["12.95"], "sources": ["shipping_policy.md"]},
+  {"id": "free_standard_shipping", "question": "When is standard shipping free?", "expect": "answer", "must_contain": ["60"], "sources": ["shipping_policy.md"]},
+  {"id": "furniture_delivery", "question": "How long does furniture delivery take?", "expect": "answer", "must_contain": ["7", "14"], "sources": ["shipping_policy.md"]},
+  {"id": "payment_methods", "question": "Which payment methods do you accept?", "expect": "answer", "must_contain": ["PayPal", "Klarna"], "sources": ["payments_and_billing.md"]},
+  {"id": "failed_payment", "question": "What happens if my payment fails?", "expect": "answer", "must_contain": ["48"], "sources": ["payments_and_billing.md"]},
+  {"id": "password_reset", "question": "How long is the password reset link valid?", "expect": "answer", "must_contain": ["30"], "sources": ["account_and_privacy.md"]},
+  {"id": "support_hours", "question": "When is live chat support available?", "expect": "answer", "must_contain": ["9", "18"], "sources": ["faq.md"]},
+  {"id": "gift_card_validity", "question": "How long are gift cards valid?", "expect": "answer", "must_contain": ["3 years"], "sources": ["faq.md"]},
+  {"id": "aurum_dishwasher", "question": "Can I put Aurum plates in the dishwasher?", "expect": "answer", "must_contain": ["dishwasher"], "sources": ["product_care_guide.pdf"], "page": 3},
+  {"id": "linen_washing", "question": "At what temperature should I wash linen bedding?", "expect": "answer", "must_contain": ["40"], "sources": ["product_care_guide.pdf"], "page": 2},
+  {"id": "voucher_points", "question": "How many points do I need for a 5 euro voucher?", "expect": "answer", "must_contain": ["100"], "sources": ["lumen_circle_loyalty_program.pdf"], "page": 1},
+  {"id": "silver_benefits", "question": "What benefits do Silver members get?", "expect": "answer", "must_contain": ["express"], "sources": ["lumen_circle_loyalty_program.pdf"], "page": 2},
+  {"id": "gold_return_window", "question": "How long is the return window for Gold members?", "expect": "answer", "must_contain": ["60"], "sources": ["refund_policy.md", "lumen_circle_loyalty_program.pdf"]},
+
+  {"id": "near_warranty", "question": "What is the warranty period for electronics?", "expect": "refuse"},
+  {"id": "near_student_discount", "question": "Do you offer student discounts?", "expect": "refuse"},
+  {"id": "near_assembly", "question": "How do I assemble the Linea bookcase?", "expect": "refuse"},
+  {"id": "near_lamp_price", "question": "How much does the Aria table lamp cost?", "expect": "refuse"},
+  {"id": "near_price_match", "question": "Do you match prices from other stores?", "expect": "refuse"},
+
+  {"id": "out_capital", "question": "What is the capital of France?", "expect": "refuse"},
+  {"id": "out_poem", "question": "Write a short poem about the sea.", "expect": "refuse"},
+  {"id": "out_world_cup", "question": "Who won the 2022 football World Cup?", "expect": "refuse"}
+]
