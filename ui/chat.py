@@ -9,7 +9,7 @@ from rag import (
     list_documents,
     make_title,
 )
-from ui.components import render_chat_sidebar
+from ui.components import apply_chat_styles, render_chat_sidebar
 
 REFUSAL_REASONS = {
     "low_similarity": "no document was close enough to the question",
@@ -18,6 +18,7 @@ REFUSAL_REASONS = {
 }
 
 visitor_id = st.session_state.visitor_id
+apply_chat_styles()
 render_chat_sidebar(visitor_id)
 
 st.title("Ask your documents")
