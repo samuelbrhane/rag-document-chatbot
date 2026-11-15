@@ -1,4 +1,4 @@
-from rag.answer import Answer, Source, answer_question
+from rag.answer import Answer, AnswerStream, Source, answer_question
 from rag.chats import (
     ChatSummary,
     Message,
@@ -16,6 +16,7 @@ from rag.store import delete_document, list_documents
 
 __all__ = [
     "Answer",
+    "AnswerStream",
     "ChatSummary",
     "IngestResult",
     "Message",
