@@ -11,6 +11,7 @@ from rag import (
 )
 from ui.components import (
     apply_chat_styles,
+    format_citations,
     render_chat_sidebar,
     render_header,
     render_welcome,
@@ -27,7 +28,7 @@ visitor_id = st.session_state.visitor_id
 apply_chat_styles()
 render_chat_sidebar(visitor_id)
 
-render_header("Grounded", "Answers from your documents, with sources.")
+render_header("Grounded", "Answers from your documents, with sources.", brand=True)
 
 # Nothing to search yet
 if not list_documents():
@@ -38,7 +39,7 @@ if not list_documents():
 
 def show_message(message: Message, asked: str | None = None) -> None:
     with st.chat_message(message.role):
-        st.markdown(message.content)
+        st.markdown(format_citations(message.content), unsafe_allow_html=True)
 
         dev_mode = st.session_state.get("dev_mode", False)
 

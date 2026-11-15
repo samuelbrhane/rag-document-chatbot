@@ -2,15 +2,15 @@ import streamlit as st
 
 _CHAT_CSS = """
 <style>
-/* User messages: right side, rounded bubble, no avatar */
+/* User messages: right side, sage bubble, no avatar */
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
     flex-direction: row-reverse;
     margin-left: auto;
     width: fit-content;
     max-width: 75%;
-    padding: 0.5rem 1rem;
-    border-radius: 1.25rem;
-    background: linear-gradient(135deg, rgba(31, 122, 92, 0.14) 0%, rgba(43, 179, 163, 0.14) 100%);
+    padding: 0.55rem 1.1rem;
+    border-radius: 1.25rem 1.25rem 0.35rem 1.25rem;
+    background: #EDF2EC;
 }
 
 [data-testid="stChatMessageAvatarUser"] {
@@ -19,7 +19,7 @@ _CHAT_CSS = """
 
 /* Assistant messages: full width on the left, no background */
 [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
-    background-color: transparent;
+    background: transparent;
 }
 </style>
 """
