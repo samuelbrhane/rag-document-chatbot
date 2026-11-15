@@ -2,9 +2,9 @@ import streamlit as st
 
 from rag import delete_document, ingest_file, list_documents
 from rag.config import SUPPORTED_EXTENSIONS
+from ui.components import render_header
 
-st.title("Documents")
-st.caption("Upload the documents the chatbot should answer from.")
+render_header("Documents", "Upload the files Grounded should answer from.")
 
 # Upload and index
 files = st.file_uploader(
