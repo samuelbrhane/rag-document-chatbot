@@ -75,7 +75,7 @@ if question := st.chat_input("Ask a question about your documents"):
 
     with st.chat_message("assistant"):
         try:
-            with st.spinner("Searching documents..."):
+            with st.spinner("Thinking..."):
                 stream = AnswerStream(question, history)
             if stream.answer is None:
                 st.write_stream(stream)
