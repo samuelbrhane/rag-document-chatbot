@@ -1,9 +1,9 @@
 import streamlit as st
 
 from rag import (
+    AnswerStream,
     Message,
     add_message,
-    answer_question,
     create_chat,
     get_messages,
     list_documents,
@@ -66,30 +66,30 @@ for message in messages:
 if question := st.chat_input("Ask a question about your documents"):
     show_message(Message(role="user", content=question))
 
-    is_new_chat = chat_id is None
-    if is_new_chat:
+    if chat_id is None:
         chat_id = create_chat(visitor_id, make_title(question))
         st.session_state.chat_id = chat_id
 
     history = [(m.role, m.content) for m in messages]
     add_message(chat_id, Message(role="user", content=question))
 
-    try:
-        with st.spinner("Searching documents..."):
-            answer = answer_question(question, history)
-        reply = Message(
-            role="assistant",
-            content=answer.text,
-            rewritten_question=answer.searched_for,
-            sources=answer.sources,
-            refused=answer.refused,
-            refusal_reason=answer.reason,
-        )
-    except Exception as error:
-        reply = Message(role="assistant", content=f"Something went wrong: {error}")
+    with st.chat_message("assistant"):
+        try:
+            with st.spinner("Searching documents..."):
+                stream = AnswerStream(question, history)
+            if stream.answer is None:
+                st.write_stream(stream)
+            answer = stream.answer
+            reply = Message(
+                role="assistant",
+                content=answer.text,
+                rewritten_question=answer.searched_for,
+                sources=answer.sources,
+                refused=answer.refused,
+                refusal_reason=answer.reason,
+            )
+        except Exception as error:
+            reply = Message(role="assistant", content=f"Something went wrong: {error}")
 
     add_message(chat_id, reply)
-    show_message(reply, asked=question)
-
-    if is_new_chat:
-        st.rerun()  # refresh the sidebar so the new chat appears in the list
+    st.rerun()  # redraw from the database with sources and the updated sidebar
