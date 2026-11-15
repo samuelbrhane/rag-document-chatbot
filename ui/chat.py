@@ -12,6 +12,7 @@ from rag import (
 from ui.components import (
     apply_chat_styles,
     format_citations,
+    format_source,
     render_chat_sidebar,
     render_header,
     render_welcome,
@@ -55,7 +56,7 @@ def show_message(message: Message, asked: str | None = None) -> None:
             if dev_mode:
                 label += f" · score {source.similarity:.2f}"
             with st.expander(label):
-                st.write(source.content)
+                st.markdown(format_source(source.content), unsafe_allow_html=True)
 
 
 # Load the open chat

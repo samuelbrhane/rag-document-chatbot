@@ -49,6 +49,13 @@ _APP_CSS = """
     vertical-align: 0.15em;
 }
 
+/* Source text inside the source boxes */
+.gd-source {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #4A5A53;
+}
+
 /* Primary buttons: solid moss */
 [data-testid="stBaseButton-primary"] {
     background: #1E4D3A;
