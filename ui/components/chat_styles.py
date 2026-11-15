@@ -10,7 +10,7 @@ _CHAT_CSS = """
     max-width: 75%;
     padding: 0.5rem 1rem;
     border-radius: 1.25rem;
-    background-color: rgba(128, 128, 128, 0.12);
+    background: linear-gradient(135deg, rgba(31, 122, 92, 0.14) 0%, rgba(43, 179, 163, 0.14) 100%);
 }
 
 [data-testid="stChatMessageAvatarUser"] {
