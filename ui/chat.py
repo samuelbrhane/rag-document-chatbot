@@ -6,6 +6,7 @@ from rag import (
     add_message,
     create_chat,
     get_messages,
+    limit_message,
     list_documents,
     make_title,
 )
@@ -79,6 +80,10 @@ typed = st.chat_input("Ask a question about your documents")
 question = typed or st.session_state.pop("pending_question", None)
 
 if question:
+    if limit := limit_message(visitor_id):
+        st.warning(limit)
+        st.stop()
+
     show_message(Message(role="user", content=question))
 
     if chat_id is None:
