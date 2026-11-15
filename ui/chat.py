@@ -9,7 +9,7 @@ from rag import (
     list_documents,
     make_title,
 )
-from ui.components import apply_chat_styles, render_chat_sidebar
+from ui.components import apply_chat_styles, render_chat_sidebar, smooth_stream
 
 REFUSAL_REASONS = {
     "low_similarity": "no document was close enough to the question",
@@ -79,7 +79,7 @@ if question := st.chat_input("Ask a question about your documents"):
             with st.spinner("Thinking..."):
                 stream = AnswerStream(question, history)
             if stream.answer is None:
-                st.write_stream(stream)
+                st.write_stream(smooth_stream(stream))
             answer = stream.answer
             reply = Message(
                 role="assistant",
