@@ -13,8 +13,8 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 EMBEDDING_DIM = 1536
 
 # Chunking (in characters)
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 150
+CHUNK_SIZE = 500
+CHUNK_OVERLAP = 75
 
 # Retrieval
 TOP_K = 5
