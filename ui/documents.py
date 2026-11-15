@@ -1,28 +1,34 @@
 import streamlit as st
 
 from rag import delete_document, ingest_file, list_documents
-from rag.config import SUPPORTED_EXTENSIONS
+from rag.config import DEMO_MODE, SUPPORTED_EXTENSIONS
 from ui.components import render_header
 
 render_header("Documents", "Upload the files Grounded should answer from.")
 
 # Upload and index
-files = st.file_uploader(
-    "Upload documents",
-    type=[ext.lstrip(".") for ext in SUPPORTED_EXTENSIONS],
-    accept_multiple_files=True,
-)
+if DEMO_MODE:
+    st.info(
+        "Uploads are turned off in this public demo. "
+        "The chatbot answers from the Lumen Home documents listed below."
+    )
+else:
+    files = st.file_uploader(
+        "Upload documents",
+        type=[ext.lstrip(".") for ext in SUPPORTED_EXTENSIONS],
+        accept_multiple_files=True,
+    )
 
-if st.button("Index documents", type="primary", disabled=not files):
-    for file in files:
-        with st.spinner(f"Indexing {file.name}..."):
-            try:
-                result = ingest_file(file.name, file.getvalue())
-                st.success(f"{result.filename}: {result.pages} pages, {result.chunks} chunks")
-            except ValueError as error:
-                st.warning(str(error))
-            except Exception as error:
-                st.error(f"{file.name} failed: {error}")
+    if st.button("Index documents", type="primary", disabled=not files):
+        for file in files:
+            with st.spinner(f"Indexing {file.name}..."):
+                try:
+                    result = ingest_file(file.name, file.getvalue())
+                    st.success(f"{result.filename}: {result.pages} pages, {result.chunks} chunks")
+                except ValueError as error:
+                    st.warning(str(error))
+                except Exception as error:
+                    st.error(f"{file.name} failed: {error}")
 
 # List and delete
 st.subheader("Indexed documents")
@@ -34,6 +40,6 @@ if not documents:
 for filename, chunk_count in documents:
     name_col, button_col = st.columns([4, 1])
     name_col.write(f"**{filename}** · {chunk_count} chunks")
-    if button_col.button("Delete", key=f"delete_{filename}"):
+    if not DEMO_MODE and button_col.button("Delete", key=f"delete_{filename}"):
         delete_document(filename)
         st.rerun()
