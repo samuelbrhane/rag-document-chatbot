@@ -110,3 +110,19 @@ def get_messages(chat_id: int, visitor_id: str) -> list[Message]:
         )
         for role, content, rewritten, sources, refused, reason in rows
     ]
+
+
+def count_questions_today(visitor_id: str | None = None) -> int:
+    """Count questions asked in the last 24 hours, for one visitor or for everyone."""
+    with get_connection() as conn:
+        return conn.execute(
+            """
+            SELECT COUNT(*)
+            FROM messages m
+            JOIN chats c ON c.id = m.chat_id
+            WHERE m.role = 'user'
+              AND m.created_at > now() - interval '24 hours'
+              AND (%(visitor)s::text IS NULL OR c.visitor_id = %(visitor)s)
+            """,
+            {"visitor": visitor_id},
+        ).fetchone()[0]

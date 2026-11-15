@@ -22,3 +22,8 @@ MIN_SIMILARITY = 0.25
 
 # Files
 SUPPORTED_EXTENSIONS = (".pdf", ".txt", ".md")
+
+# Public demo
+DEMO_MODE = os.getenv("DEMO_MODE", "false").lower() == "true"
+DAILY_QUESTIONS_PER_VISITOR = int(os.getenv("DAILY_QUESTIONS_PER_VISITOR", "20"))
+DAILY_QUESTIONS_TOTAL = int(os.getenv("DAILY_QUESTIONS_TOTAL", "300"))
