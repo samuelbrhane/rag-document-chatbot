@@ -38,6 +38,12 @@ def save_document(filename: str, chunks: list[Chunk], vectors: list[list[float]]
     return document_id
 
 
+def delete_document(filename: str) -> None:
+    """Delete a document and, through the cascade, all its chunks."""
+    with get_connection() as conn:
+        conn.execute("DELETE FROM documents WHERE filename = %s", (filename,))
+
+
 def list_documents() -> list[tuple[str, int]]:
     """Return each stored document's filename and number of chunks, newest first."""
     with get_connection() as conn:
