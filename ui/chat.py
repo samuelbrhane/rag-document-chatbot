@@ -28,7 +28,7 @@ visitor_id = st.session_state.visitor_id
 apply_chat_styles()
 render_chat_sidebar(visitor_id)
 
-render_header("Grounded", "Answers from your documents, with sources.", brand=True)
+render_header("Ask Lumen Home", "Answers from the store's documents, with sources.")
 
 # Nothing to search yet
 if not list_documents():

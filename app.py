@@ -2,7 +2,8 @@ import streamlit as st
 
 from ui.components import apply_app_styles, get_visitor_id
 
-st.set_page_config(page_title="Grounded", page_icon=":material/fact_check:")
+st.set_page_config(page_title="Grounded", page_icon="assets/favicon.png")
+st.logo("assets/logo.png", icon_image="assets/favicon.png", size="large")
 get_visitor_id()
 apply_app_styles()
 
