@@ -37,3 +37,10 @@ def render_chat_sidebar(visitor_id: str) -> None:
                     if is_open:
                         st.session_state.chat_id = None
                     st.rerun()
+
+        st.divider()
+        st.toggle(
+            "Developer mode",
+            key="dev_mode",
+            help="Show similarity scores, rewritten questions and refusal reasons.",
+        )

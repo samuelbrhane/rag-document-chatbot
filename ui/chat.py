@@ -33,15 +33,20 @@ def show_message(message: Message, asked: str | None = None) -> None:
     with st.chat_message(message.role):
         st.markdown(message.content)
 
-        if message.rewritten_question and message.rewritten_question != asked:
+        dev_mode = st.session_state.get("dev_mode", False)
+
+        if dev_mode and message.rewritten_question and message.rewritten_question != asked:
             st.caption(f"Searched for: {message.rewritten_question}")
 
-        if message.refused and message.refusal_reason:
+        if dev_mode and message.refused and message.refusal_reason:
             st.caption(f"Refused because {REFUSAL_REASONS[message.refusal_reason]}.")
 
         for source in message.sources:
             location = source.filename if source.page is None else f"{source.filename}, page {source.page}"
-            with st.expander(f"[{source.number}] {location} · score {source.similarity:.2f}"):
+            label = f"[{source.number}] {location}"
+            if dev_mode:
+                label += f" · score {source.similarity:.2f}"
+            with st.expander(label):
                 st.write(source.content)
 
 
